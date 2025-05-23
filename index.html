@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOBI EVENTS - Turning Moments into Memories</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        .hero-bg {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23f0f0f0" width="1200" height="800"/><g fill="%23ddd"><circle cx="200" cy="150" r="50"/><circle cx="400" cy="300" r="30"/><circle cx="800" cy="200" r="40"/><circle cx="1000" cy="400" r="35"/><rect x="100" y="500" width="100" height="80" rx="10"/><rect x="600" y="600" width="120" height="60" rx="8"/></g></svg>');
+            background-size: cover;
+            background-position: center;
+        }
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+        }
+        .lightbox.active { display: flex; }
+        .service-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        .gallery-item {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .back-to-top.visible {
+            opacity: 1;
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+            left: 0;
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-white shadow-lg z-50 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                        MOBI EVENTS
+                    </h1>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#home" class="nav-link text-gray-800 hover:text-purple-600 px-3 py-2 text-sm font-medium">Home</a>
+                        <a href="#about" class="nav-link text-gray-800 hover:text-purple-600 px-3 py-2 text-sm font-medium">About</a>
+                        <a href="#services" class="nav-link text-gray-800 hover:text-purple-600 px-3 py-2 text-sm font-medium">Services</a>
+                        <a href="#gallery" class="nav-link text-gray-800 hover:text-purple-600 px-3 py-2 text-sm font-medium">Gallery</a>
+                        <a href="#contact" class="nav-link text-gray-800 hover:text-purple-600 px-3 py-2 text-sm font-medium">Contact</a>
+                    </div>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button class="mobile-menu-btn text-gray-800 hover:text-purple-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-menu hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#home" class="block px-3 py-2 text-gray-800 hover:text-purple-600">Home</a>
+                <a href="#about" class="block px-3 py-2 text-gray-800 hover:text-purple-600">About</a>
+                <a href="#services" class="block px-3 py-2 text-gray-800 hover:text-purple-600">Services</a>
+                <a href="#gallery" class="block px-3 py-2 text-gray-800 hover:text-purple-600">Gallery</a>
+                <a href="#contact" class="block px-3 py-2 text-gray-800 hover:text-purple-600">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg h-screen flex items-center justify-center text-white">
+        <div class="text-center px-4">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">MOBI EVENTS</h1>
+            <p class="text-xl md:text-2xl mb-8 font-light">Turning Moments into Memories</p>
+            <a href="#contact" class="inline-block bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:scale-105 transition-transform duration-300 shadow-lg">
+                Book Now
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">About MOBI EVENTS</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-purple-600 to-blue-600 mx-auto mb-8"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-6">Our Story</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        Founded with a passion for creating unforgettable experiences, MOBI EVENTS has been transforming 
+                        ordinary moments into extraordinary memories for over a decade. We believe that every celebration 
+                        deserves to be perfect, and we're here to make that happen.
+                    </p>
+                    <p class="text-gray-600 leading-relaxed">
+                        From intimate gatherings to grand celebrations, our team of dedicated professionals brings 
+                        creativity, attention to detail, and unparalleled service to every event we touch.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                        <i class="fas fa-heart text-3xl text-purple-600 mb-4"></i>
+                        <h4 class="font-semibold text-gray-800">Passion</h4>
+                        <p class="text-gray-600 text-sm mt-2">We love what we do</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                        <i class="fas fa-star text-3xl text-purple-600 mb-4"></i>
+                        <h4 class="font-semibold text-gray-800">Excellence</h4>
+                        <p class="text-gray-600 text-sm mt-2">Quality in every detail</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                        <i class="fas fa-users text-3xl text-purple-600 mb-4"></i>
+                        <h4 class="font-semibold text-gray-800">Trust</h4>
+                        <p class="text-gray-600 text-sm mt-2">Your reliable partner</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                        <i class="fas fa-lightbulb text-3xl text-purple-600 mb-4"></i>
+                        <h4 class="font-semibold text-gray-800">Innovation</h4>
+                        <p class="text-gray-600 text-sm mt-2">Creative solutions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Our Services</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-purple-600 to-blue-600 mx-auto mb-8"></div>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    We offer comprehensive event management services to make your special day perfect
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Catering Service -->
+                <div class="service-card rounded-xl p-8 text-white text-center">
+                    <i class="fas fa-utensils text-4xl mb-6"></i>
+                    <h3 class="text-2xl font-bold mb-4">Catering</h3>
+                    <p class="mb-6 opacity-90">Exquisite culinary experiences tailored to your taste</p>
+                    <ul class="text-sm space-y-2 opacity-80">
+                        <li>• Custom menu planning</li>
+                        <li>• International cuisines</li>
+                        <li>• Dietary accommodations</li>
+                        <li>• Professional service staff</li>
+                    </ul>
+                </div>
+
+                <!-- Decorations Service -->
+                <div class="service-card rounded-xl p-8 text-white text-center">
+                    <i class="fas fa-palette text-4xl mb-6"></i>
+                    <h3 class="text-2xl font-bold mb-4">Decorations</h3>
+                    <p class="mb-6 opacity-90">Transform your venue with stunning visual designs</p>
+                    <ul class="text-sm space-y-2 opacity-80">
+                        <li>• Theme-based decorations</li>
+                        <li>• Floral arrangements</li>
+                        <li>• Lighting design</li>
+                        <li>• Custom backdrops</li>
+                    </ul>
+                </div>
+
+                <!-- Tent & Chair Rentals Service -->
+                <div class="service-card rounded-xl p-8 text-white text-center">
+                    <i class="fas fa-chair text-4xl mb-6"></i>
+                    <h3 class="text-2xl font-bold mb-4">Tent & Chair Rentals</h3>
+                    <p class="mb-6 opacity-90">Complete furniture and shelter solutions</p>
+                    <ul class="text-sm space-y-2 opacity-80">
+                        <li>• Various tent sizes</li>
+                        <li>• Premium seating options</li>
+                        <li>• Table arrangements</li>
+                        <li>• Weather protection</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Our Gallery</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-purple-600 to-blue-600 mx-auto mb-8"></div>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button class="filter-btn active bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-full font-medium transition-all duration-300" data-filter="all">
+                    All
+                </button>
+                <button class="filter-btn bg-white text-gray-700 hover:bg-gray-100 px-6 py-2 rounded-full font-medium transition-all duration-300 shadow-md" data-filter="catering">
+                    Catering
+                </button>
+                <button class="filter-btn bg-white text-gray-700 hover:bg-gray-100 px-6 py-2 rounded-full font-medium transition-all duration-300 shadow-md" data-filter="decorations">
+                    Decorations
+                </button>
+                <button class="filter-btn bg-white text-gray-700 hover:bg-gray-100 px-6 py-2 rounded-full font-medium transition-all duration-300 shadow-md" data-filter="rentals">
+                    Tent & Chair Rentals
+                </button>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="gallery-grid">
+                <!-- Catering Images -->
+                <div class="gallery-item rounded-lg overflow-hidden shadow-lg" data-category="catering">
+                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><rect fill='%23ff6b6b' width='400' height='300'/><circle fill='%23fff' cx='200' cy='150' r='50'/><text x='200' y='200' text-anchor='middle' fill='%23fff' font-family='Arial' font-size='20'>Catering 1</text></svg>" alt="Catering" class="w-full h-64 object-cover">
+                </div>
+                <div class="gallery-item rounded-lg overflow-hidden shadow-lg" data-category="catering">
+                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><rect fill='%23ff8e53' width='400' height='300'/><circle fill='%23fff' cx='200' cy='150' r='50'/><text x='200' y='200' text-anchor='middle' fill='%23fff' font-family='Arial' font-size='20'>Catering 2</text></svg>" alt="Catering" class="w-full h-64 object-cover">
+                </div>
+                <div class="gallery-item rounded-lg overflow-hidden shadow-lg" data-category="catering">
+                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><rect fill='%23ff9f40' width='400' height='300'/><circle fill='%23fff' cx='200' cy='150' r='50'/><text x='200' y='200' text-anchor='middle' fill='%23fff' font-family='Arial' font-size='20'>Catering 3</text></svg>" alt="Catering" class="w-full h-64 object-cover">
+                </div>
+
+                <!-- Decorations Images -->
+                <div class="gallery-item rounded-lg overflow-hidden shadow-lg" data-category="decorations">
+                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><rect fill='%2374b9ff' width='400' height='300'/><polygon fill='%23fff' points='200,100 150,200 250,200'/><text x='200' y='250' text-anchor='middle' fill='%23fff' font-family='Arial' font-size='18'>Decorations 1</text></svg>" alt="Decorations" class="w-full h-64 object-cover">
+                </div>
+                <div class="gallery-item rounded-lg overflow-hidden shadow-lg" data-category="decorations">
+                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><rect fill='%230984e3' width='400' height='300'/><polygon fill='%23fff' points='200,100 150,200 250,200'/><text x='200' y='250' text-anchor='middle' fill='%23fff' font-family='Arial' font-size='18'>Decorations 2</text></svg>" alt="Decorations" class="w-full h-64 object-cover">
+                </div>
+                <div class="gallery-item rounded-lg overflow-hidden shadow-lg" data-category="decorations">
+                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><rect fill='%236c5ce7' width='400' height='300'/><polygon fill='%23fff' points='200,100 150,200 250,200'/><text x='200' y='250' text-anchor='middle' fill='%23fff' font-family='Arial' font-size='18'>Decorations 3</text></svg>" alt="Decorations" class="w-full h-64 object-cover">
+                </div>
+
+                <!-- Rentals Images -->
+                <div class="gallery-item rounded-lg overflow-hidden shadow-lg" data-category="rentals">
+                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><rect fill='%2300b894' width='400' height='300'/><rect fill='%23fff' x='150' y='120' width='100' height='60' rx='10'/><text x='200' y='220' text-anchor='middle' fill='%23fff' font-family='Arial' font-size='18'>Rentals 1</text></svg>" alt="Tent & Chair Rentals" class="w-full h-64 object-cover">
+                </div>
+                <div class="gallery-item rounded-lg overflow-hidden shadow-lg" data-category="rentals">
+                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><rect fill='%2300cec9' width='400' height='300'/><rect fill='%23fff' x='150' y='120' width='100' height='60' rx='10'/><text x='200' y='220' text-anchor='middle' fill='%23fff' font-family='Arial' font-size='18'>Rentals 2</text></svg>" alt="Tent & Chair Rentals" class="w-full h-64 object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Contact & Booking</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-purple-600 to-blue-600 mx-auto mb-8"></div>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Ready to plan your perfect event? Get in touch with us today!
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-6">Get In Touch</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-map-marker-alt text-purple-600 text-xl w-8"></i>
+                            <span class="text-gray-600">123 Event Street, City, State 12345</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-phone text-purple-600 text-xl w-8"></i>
+                            <span class="text-gray-600">(555) 123-4567</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope text-purple-600 text-xl w-8"></i>
+                            <span class="text-gray-600">info@mobievents.com</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4">Follow Us</h4>
+                        <div class="flex space-x-4">
+                            <a href="#" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-3 rounded-full hover:scale-110 transition-transform">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-3 rounded-full hover:scale-110 transition-transform">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-3 rounded-full hover:scale-110 transition-transform">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <form id="contact-form" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Name *</label>
+                                <input type="text" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all">
+                                <span class="error-message text-red-500 text-sm hidden">Please enter your name</span>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Email *</label>
+                                <input type="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all">
+                                <span class="error-message text-red-500 text-sm hidden">Please enter a valid email</span>
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Phone</label>
+                                <input type="tel" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Event Date</label>
+                                <input type="date" name="eventDate" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Service Required</label>
+                            <select name="service" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all">
+                                <option value="">Select a service</option>
+                                <option value="catering">Catering</option>
+                                <option value="decorations">Decorations</option>
+                                <option value="rentals">Tent & Chair Rentals</option>
+                                <option value="full-package">Full Event Package</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Message</label>
+                            <textarea name="message" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all" placeholder="Tell us about your event..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:scale-105 transition-transform duration-300 shadow-lg">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-4">
+                        MOBI EVENTS
+                    </h3>
+                    <p class="text-gray-300">
+                        Turning moments into memories with exceptional event management services.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-300 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="#about" class="text-gray-300 hover:text-white transition-colors">About</a></li>
+                        <li><a href="#services" class="text-gray-300 hover:text-white transition-colors">Services</a></li>
+                        <li><a href="#gallery" class="text-gray-300 hover:text-white transition-colors">Gallery</a></li>
+                        <li><a href="#contact" class="text-gray-300 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
+                    <p class="text-gray-300 mb-2">123 Event Street, City, State 12345</p>
+                    <p class="text-gray-300 mb-2">(555) 123-4567</p>
+                    <p class="text-gray-300">info@mobievents.com</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-300">
+                    &copy; 2025 MOBI EVENTS. All rights reserved. | Turning Moments into Memories
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content flex items-center justify-center w-full h-full p-4">
+            <img id="lightbox-img" class="max-w-full max-h-full object-contain">
+            <button class="lightbox-close absolute top-4 right-8 text-white text-3xl font-bold hover:text-gray-300 transition-colors" onclick="closeLightbox()">
+                &times;
+            </button>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking on links
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Gallery filter functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => {
+                    b.classList.remove('active');
+                    b.classList.remove('bg-gradient-to-r', 'from-purple-600', 'to-blue-600', 'text-white');
+                    b.classList.add('bg-white', 'text-gray-700', 'hover:bg-gray-100', 'shadow-md');
+                });
+                
+                // Add active class to clicked button
+                btn.classList.add('active');
+                btn.classList.add('bg-gradient-to-r', 'from-purple-600', 'to-blue-600', 'text-white');
+                btn.classList.remove('bg-white', 'text-gray-700', 'hover:bg-gray-100', 'shadow-md');
+
+                const filter = btn.getAttribute('data-filter');
+                
+                galleryItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'scale(1)';
+                        }, 10);
+                    } else {
+                        item.style.opacity = '0';
+                        item.style.transform = 'scale(0.8)';
+                        setTimeout(() => {
+                            item.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+        // Lightbox functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        
+        galleryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const img = item.querySelector('img');
+                lightboxImg.src = img.src;
+                lightboxImg.alt = img.alt;
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close lightbox when clicking outside the image
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        // Close lightbox with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+
+        // Back to top button functionality
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Form validation
+        const contactForm = document.getElementById('contact-form');
+        
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(contactForm);
+            const name = formData.get('name').trim();
+            const email = formData.get('email').trim();
+            
+            // Reset previous error messages
+            const errorMessages = contactForm.querySelectorAll('.error-message');
+            errorMessages.forEach(msg => msg.classList.add('hidden'));
+            
+            let isValid = true;
+            
+            // Validate name
+            if (!name) {
+                const nameError = contactForm.querySelector('input[name="name"]').nextElementSibling;
+                nameError.classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email || !emailRegex.test(email)) {
+                const emailError = contactForm.querySelector('input[name="email"]').nextElementSibling;
+                emailError.classList.remove('hidden');
+                emailError.textContent = !email ? 'Please enter your email' : 'Please enter a valid email';
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // Simulate form submission
+                const submitBtn = contactForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                
+                submitBtn.textContent = 'Sending...';
+                submitBtn.disabled = true;
+                
+                setTimeout(() => {
+                    alert('Thank you for your message! We will get back to you soon.');
+                    contactForm.reset();
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }, 2000);
+            }
+        });
+
+        // Smooth navbar background change on scroll
+        const navbar = document.getElementById('navbar');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 100) {
+                navbar.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.backdropFilter = 'blur(10px)';
+            } else {
+                navbar.style.backgroundColor = 'white';
+                navbar.style.backdropFilter = 'none';
+            }
+        });
+
+        // Add animation classes on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe sections for scroll animations
+        const sections = document.querySelectorAll('section');
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'all 0.8s ease-out';
+            observer.observe(section);
+        });
+
+        // Set current year in footer
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentYear = new Date().getFullYear();
+            const copyrightText = document.querySelector('footer p');
+            if (copyrightText) {
+                copyrightText.innerHTML = copyrightText.innerHTML.replace('2025', currentYear);
+            }
+        });
+
+        // Add hover effects to service cards
+        const serviceCards = document.querySelectorAll('.service-card');
+        serviceCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add parallax effect to hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.getElementById('home');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Initialize AOS-like animations for gallery items
+        const galleryObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0) scale(1)';
+                    }, index * 100);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Apply initial styles and observe gallery items
+        galleryItems.forEach((item, index) => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(30px) scale(0.9)';
+            item.style.transition = 'all 0.6s ease-out';
+            galleryObserver.observe(item);
+        });
+    </script>
+</body>
+</html>
